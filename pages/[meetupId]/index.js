@@ -58,11 +58,14 @@ export async function getStaticPaths() {
 
 	await client.close();
 
+	// fallback set to true/blocking results in not sending 404 error to page instead waiting for it
+	// this usually happens when a new dynamic page is added which never got cached at build
+	// true = user will see page with nothing on it || blocking = page will only show once its loaded
 	return {
 		paths: meetups.map((meetup) => {
 			return { params: { meetupId: meetup._id.toString() } };
 		}),
-		fallback: false,
+		fallback: "blocking",
 	};
 
 	// return {
